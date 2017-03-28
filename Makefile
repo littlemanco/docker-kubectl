@@ -27,15 +27,15 @@ help: ## Show this menu
 	@grep -E '^[a-zA-Z_-%]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "    \033[32m%-30s\033[0m %s\n", $$1, $$2}'
 
 clean: ## Remove any build artifacts
-	rm kubectl
+	-rm kubectl
 
 fetch: clean ## ${VERSION} | Downloads the kubectl binary
-	[ -z "${VERSION}" ] && exit 1
+	[ ! -z "${VERSION}" ] || exit 1
 	curl --output "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/bin/linux/amd64/kubectl"
 	chmod +x kubectl
 
 image: ## Builds and tags an image at a given version. Expects VCS to be tagged with the appropriate version (Debian versioning strategy)
-	[ -z "$(APP_VERSION)" ] && exit 1
+	[ ! -z "$(APP_VERSION)" ] || exit 1
 	docker build -t quay.io/littlemanco/kubectl:v$(APP_VERSION) .
 
 push: ## ${BUILD_VERSION} | Pushes an image at a given tag to upstream
