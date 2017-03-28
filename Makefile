@@ -31,7 +31,9 @@ clean: ## Remove any build artifacts
 
 fetch: clean ## ${VERSION} | Downloads the kubectl binary
 	[ ! -z "${VERSION}" ] || exit 1
-	curl --output "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/bin/linux/amd64/kubectl"
+	curl --remote-name \
+	    --silent \
+	    "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/bin/linux/amd64/kubectl"
 	chmod +x kubectl
 
 image: ## Builds and tags an image at a given version. Expects VCS to be tagged with the appropriate version (Debian versioning strategy)
