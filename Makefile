@@ -34,7 +34,8 @@ fetch: clean ## ${VERSION} | Downloads the kubectl binary
 	curl --output "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/bin/linux/amd64/kubectl"
 	chmod +x kubectl
 
-image: ## Builds and tags an image at a given version
+image: ## Builds and tags an image at a given version. Expects VCS to be tagged with the appropriate version (Debian versioning strategy)
+	[ -z "$(APP_VERSION)" ] && exit 1
 	docker build -t quay.io/littlemanco/kubectl:v$(APP_VERSION) .
 
 push: ## ${BUILD_VERSION} | Pushes an image at a given tag to upstream
